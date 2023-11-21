@@ -21,14 +21,14 @@
             e.preventDefault();
 
             var content = document.getElementById('contentInput').value;
-            var outputDiv = document.getElementById('questio nsOutput');
+            var outputDiv = document.getElementById('questionsOutput');
 
             // ChatGPT API URL and Key
             const CHATGPT_API_ENDPOINT = "https://api.openai.com/v1/engines/davinci/completions";
-            const CHATGPT_API_KEY = "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";
+            const CHATGPT_API_KEY = "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"; // Caution: Exposing API Key in frontend is risky
 
             // Prepare the payload for the ChatGPT API with a clear prompt
-            const prompt = `"Generate 5 questions based on the following content"${content}`;
+            const prompt = `"Generate 5 questions based on the following content" ${content}`;
             const payload = {
                 "prompt": prompt,
                 "max_tokens": 1000   // Adjust as needed
