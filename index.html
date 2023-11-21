@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUSTESY Question Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>JUSTESY Question Generator</h1>
+        <form id="questionForm">
+            <textarea id="contentInput" placeholder="Enter your content here..." required></textarea>
+            <button type="submit">Generate Questions</button>
+        </form>
+        <div id="questionsOutput"></div>
+    </div>
+
+    <script>
+        document.getElementById('questionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var content = document.getElementById('contentInput').value;
+            var outputDiv = document.getElementById('questionsOutput');
+
+            // ChatGPT API URL and Key
+            const CHATGPT_API_ENDPOINT = "https://api.openai.com/v1/engines/davinci/completions";
+            const CHATGPT_API_KEY = "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"; // Caution: Exposing API Key in frontend is risky
+
+            // Prepare the payload for the ChatGPT API with a clear prompt
+            const prompt = `"Generate 5 questions based on the following content" ${content}`;
+            const payload = {
+                "prompt": prompt,
+                "max_tokens": 1000   // Adjust as needed
+            };
+            const headers = {
+                "Authorization": `Bearer ${CHATGPT_API_KEY}`,
+                "Content-Type": "application/json"
+            };
+
+            fetch(CHATGPT_API_ENDPOINT, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data (questions) here
+                outputDiv.innerHTML = '<p>' + data.choices[0].text.trim().split('\n').join('</p><p>') + '</p>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                outputDiv.innerHTML = '<p>An error occurred while generating questions.</p>';
+            });
+        });
+    </script>
+</body>
+</html>
